@@ -10,6 +10,53 @@
 #include <dt-bindings/zmk/keys.h>
 
 / {
+    macros {
+        shift: with_lshift {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            bindings =
+                <&macro_press>,
+                <&kp LEFT_SHIFT>,
+                <&macro_press>,
+                <&macro_param_1to1 &kp MACRO_PLACEHOLDER>,
+                <&macro_release>,
+                <&kp LEFT_SHIFT>;
+
+            label = "SHIFTKEY_PRESS_WITH_LEFT_SHIFT_MODIFIER";
+        };
+    };
+
+    behaviors {
+        as_ht: autoshift_hold_tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "AUTOSHIFT_HOLD_TAP";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <190>;
+        };
+
+        hml: homewrow_mods_left {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS_LEFT_HAND";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            hold-trigger-key-positions = <6 7 8 9 10 11 18 19 20 21 22 23 30 31 32 33 34 35 43 44 45 46 47 48 49 54 55 56 57>;
+        };
+
+        hmr: homewrow_mods_right {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS_RIGHT_HAND";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            hold-trigger-key-positions = <25 0 12 13 14 15 16 17 24 25 26 27 28 29 36 37 38 39 40 41 42 50 51 52 53 1 2 4 5 13 14 15 16 17 3>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -22,11 +69,11 @@
             //                     | ALT  | GUI  | LOWER|  SPACE |  | ENTER | RAISE| BSPC  | GUI   |
 
             bindings = <
-&kp ESC    &kp NUMBER_1  &kp NUMBER_2  &kp N3    &kp NUMBER_4  &kp NUMBER_5                         &kp N6  &kp N7    &kp N8     &kp N9   &kp NUMBER_0  &kp GRAVE
-&kp TAB    &kp Q         &kp W         &kp E     &kp R         &kp T                                &kp Y   &kp U     &kp I      &kp O    &kp P         &kp MINUS
-&kp LCTRL  &kp A         &kp S         &kp D     &kp F         &kp G                                &kp H   &kp J     &kp K      &kp L    &kp SEMI      &kp SQT
-&kp LSHFT  &kp Z         &kp X         &kp C     &kp V         &kp B         &kp LBKT     &kp RBKT  &kp N   &kp M     &kp COMMA  &kp DOT  &kp FSLH      &kp RSHFT
-                                       &kp LALT  &kp LGUI      &mo 1         &kp SPACE    &kp RET   &mo 2   &kp BSPC  &kp RGUI
+&kp TILDE  &kp NUMBER_1  &kp NUMBER_2  &kp N3       &kp NUMBER_4  &kp NUMBER_5                              &kp N6     &kp N7            &kp N8       &kp N9        &kp NUMBER_0     &kp GRAVE
+&kp TAB    &kp Q         &kp W         &kp E        &kp R         &kp T                                     &kp Y      &kp U             &kp I        &kp O         &kp P            &kp MINUS
+&kp LCTRL  &hml LSHFT A  &hml LCTRL S  &hml LALT D  &hml LCMD F   &kp G                                     &kp H      &hmr RIGHT_GUI J  &hmr RALT K  &hmr RCTRL L  &hmr RSHFT SEMI  &kp SQT
+&kp LSHFT  &kp Z         &kp X         &kp C        &kp V         &kp B         &kp LBKT     &kp RBKT       &kp N      &kp M             &kp COMMA    &kp DOT       &kp FSLH         &kp RSHFT
+                                       &mo 2        &mo 1         &mo 1         &kp SPACE    &kp BACKSPACE  &kp ENTER  &mo 1             &mo 2
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
@@ -47,8 +94,6 @@
 &trans      &ext_power EP_ON  &ext_power EP_OFF  &ext_power EP_TOG  &trans        &trans        &trans    &trans  &trans      &kp MINUS   &kp PLUS   &kp LBRC  &kp RBRC  &kp PIPE
                                                  &trans             &trans        &trans        &trans    &trans  &trans      &trans      &trans
             >;
-
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         raise_layer {
